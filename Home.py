@@ -14,10 +14,4 @@ if __name__ == "__main__":
             'About': "# Corso di *Basi di Dati*"
         }
     )
-    st.title("📈 Gestione Stanze Hotel")
-    st.markdown(" ## :blue[Laboratorio] :red[Streamlit]")
-
-    if "connection" not in st.session_state.keys():
-        st.session_state["connection"]=False
-
-    check_connection()
+    
