@@ -30,6 +30,23 @@ def create_tab_prodotti(tab):
             df_prodotti = pd.DataFrame(prodotti)
             st.dataframe(df_prodotti, use_container_width=True)
 
+    with tab.expander("Dettagli Pagamenti", True):
+        query="SELECT MIN(paymentDate) AS minDate, MAX(paymentDate) AS maxDate FROM payments"
+        date=execute_query(st.session_state["connection"],query)
+        min_max=[dict(zip(date.keys(), result)) for result in date]
+        
+        range_date=st.date_input("Seleziona il range di date: ",value=(min_max[0]['minDate'],min_max[0]['maxDate']), min_value=min_max[0]['minDate'], max_value=min_max[0]['maxDate'])
+        query=f"SELECT paymentDate, SUM(amount) AS totAmount FROM payments WHERE paymentDate >= '{range_date[0]}' AND paymentDate <= '{range_date[1]}' GROUP BY paymentDate;"
+        result = execute_query(st.session_state["connection"], query)
+        df = pd.DataFrame(result)
+
+        if df.empty:
+            st.warning("Nessun pagamento trovato!", icon='⚠️')
+        else:
+            df['totAmount']=df['totAmount'].astype(float)
+            df['paymentDate']=pd.to_datetime(df['paymentDate'])
+            st.line_chart(df, x='paymentDate', y='totAmount')
+
 def create_tab_staff(tab):
     col1, col2 = tab.columns(2)
 
@@ -60,6 +77,10 @@ def create_tab_clienti(tab):
 
     with col2:
         st.markdown("### Clienti con maggior _credit line_ negli USA")
+        query = "SELECT customerName, state, creditLimit FROM customers WHERE creditLimit > 100000 AND country='USA' ORDER BY creditLimit DESC;"
+        result = execute_query(st.session_state["connection"], query)
+        df = pd.DataFrame(result)
+        st.dataframe(df, use_container_width=True)
 
 if __name__ == "__main__":
     st.title("📈 Analisi")
