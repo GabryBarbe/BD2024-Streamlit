@@ -15,3 +15,9 @@ if __name__ == "__main__":
         }
     )
     
+    col1, col2 = st.columns(2)
+    col1.markdown("# :red[Laboratorio 06] :blue[Basi di Dati]")
+    col1.markdown("### Gabriele Barbero")
+    col2.image("images/polito_white.png")
+
+    check_connection()
