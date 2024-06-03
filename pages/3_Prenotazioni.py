@@ -6,4 +6,3 @@ if __name__ == "__main__":
     st.title("💸 :blue[Prenotazioni]")
     
     if check_connection():
-    

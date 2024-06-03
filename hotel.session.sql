@@ -9,3 +9,7 @@ WHERE NAgenzie = (SELECT MAX(NAgenzie)
                   FROM agenzie_per_citta);
 
 SELECT Latitudine, Longitudine FROM citta, agenzia WHERE citta.Nome=agenzia.Citta_Indirizzo;
+
+SELECT DISTINCT OPTIONAL_optional
+FROM has_optional;
+
